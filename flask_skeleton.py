@@ -13,6 +13,8 @@ if sys.version_info < (3, 0):
 else:
     from shutil import which
 
+import platform
+
 
 # Globals #
 
@@ -42,6 +44,24 @@ def main(argv):
     appname = args.appname
     fullpath = os.path.join(cwd, appname)
     skeleton_dir = args.skeleton
+
+    # Summary #
+
+    def generate_brief(template_var):
+        template = template_env.get_template('brief.jinja2')
+        return template.render(template_var)
+
+    template_var = {
+        'pyversion': platform.python_version(),
+        'appname': appname,
+        'bower': args.bower,
+        'virtualenv': args.virtualenv,
+        'skeleton': args.skeleton,
+        'path': fullpath,
+        'git': args.git
+    }
+
+    print(generate_brief(template_var))
 
     # Tasks #
 

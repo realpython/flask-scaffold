@@ -1,0 +1,11 @@
+
+Welcome! The following settings will be used to create your application:
+
+Python Version:     {{ pyversion }}
+Project Name:       {{ appname }}
+Project Path:       {{ path }}
+Virtualenv:         {% if virtualenv %}Enabled{% else %}Disabled{% endif %}
+Skeleton:           {{ skeleton }}
+Git:                {% if git %}Yes{% else %}{{ disabled }}No{% endif %}
+Bower:              {% if bower %}Enabled{% else %}Disabled{% endif %}
+{% if bower %}Bower Dependencies: {% for dependency in bower %}{{ dependency }}{% endfor %}{% endif %}
