@@ -34,6 +34,7 @@ def main(argv):
     parser.add_argument('-s', '--skeleton', help='The skeleton folder to use.')
     parser.add_argument('-b', '--bower', help='Install dependencies via bower')
     parser.add_argument('-v', '--virtualenv', action='store_true')
+    parser.add_argument('-g', '--git', action='store_true')
     args = parser.parse_args()
 
     # Variables #
@@ -107,6 +108,23 @@ def main(argv):
                     sys.exit(2)
         else:
             print("Could not find virtualenv executable. Ignoring")
+
+    # Git init
+    if args.git:
+        output, error = subprocess.Popen(
+            ['git', 'init', fullpath],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        ).communicate()
+        if error:
+            with open('git_error.log', 'w') as fd:
+                fd.write(error.decode('utf-8'))
+                print("Error with git init")
+                sys.exit(2)
+        shutil.copyfile(
+            os.path.join(script_dir, 'templates', '.gitignore'),
+            os.path.join(fullpath, '.gitignore')
+        )
 
 
 if __name__ == '__main__':
