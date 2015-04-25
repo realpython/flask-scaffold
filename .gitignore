@@ -4,5 +4,3 @@ __pycache__/
 *.DS_Store
 
 blog_flask_scaffold.md
-flask_skeleton_2.py
-flask_skeleton_confirm_2.py
