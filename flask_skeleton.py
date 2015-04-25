@@ -33,6 +33,7 @@ def main(argv):
     parser.add_argument('appname', help='The application name')
     parser.add_argument('-s', '--skeleton', help='The skeleton folder to use.')
     parser.add_argument('-b', '--bower', help='Install dependencies via bower')
+    parser.add_argument('-v', '--virtualenv', action='store_true')
     args = parser.parse_args()
 
     # Variables #
@@ -73,6 +74,39 @@ def main(argv):
                     print(error)
         else:
             print("Could not find bower. Ignoring.")
+
+    # Add a virtualenv
+    virtualenv = args.virtualenv
+    if virtualenv:
+        virtualenv_exe = which('pyvenv')
+        if virtualenv_exe:
+            output, error = subprocess.Popen(
+                [virtualenv_exe, os.path.join(fullpath, 'env')],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            ).communicate()
+            if error:
+                with open('virtualenv_error.log', 'w') as fd:
+                    fd.write(error.decode('utf-8'))
+                    print("An error occurred with virtualenv")
+                    sys.exit(2)
+            venv_bin = os.path.join(fullpath, 'env/bin')
+            output, error = subprocess.Popen(
+                [
+                    os.path.join(venv_bin, 'pip'),
+                    'install',
+                    '-r',
+                    os.path.join(fullpath, 'requirements.txt')
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            ).communicate()
+            if error:
+                with open('pip_error.log', 'w') as fd:
+                    fd.write(error.decode('utf-8'))
+                    sys.exit(2)
+        else:
+            print("Could not find virtualenv executable. Ignoring")
 
 
 if __name__ == '__main__':
