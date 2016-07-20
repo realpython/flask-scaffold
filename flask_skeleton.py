@@ -84,7 +84,7 @@ def main(args):
         bower = args.bower.split(',')
         bower_exe = which('bower')
         if bower_exe:
-            os.chdir(os.path.join(fullpath, 'project', 'static'))
+            os.chdir(os.path.join(fullpath, 'project', 'client', 'static'))
             for dependency in bower:
                 output, error = subprocess.Popen(
                     [bower_exe, 'install', dependency],
