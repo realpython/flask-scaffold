@@ -153,4 +153,19 @@ def main(args):
 if __name__ == '__main__':
     arguments = get_arguments(sys.argv)
     print(generate_brief(arguments))
-    main(arguments)
+    if sys.version_info < (3, 0):
+        input = raw_input
+    proceed = input("\nProceed (yes/no)? ")
+    valid = ["yes", "y", "no", "n"]
+    while True:
+        if proceed.lower() in valid:
+            if proceed.lower() == "yes" or proceed.lower() == "y":
+                main(arguments)
+                print("Done!")
+                break
+            else:
+                print("Goodbye!")
+                break
+        else:
+            print("Please respond with 'yes' or 'no' (or 'y' or 'n').")
+            proceed = input("\nProceed (yes/no)? ")
